@@ -14,7 +14,14 @@
   				<input type="text" id="data" name="data"><br><br>
 				<button onclick="send()">Send</button>
 			</div>
-			<div class="prediction" id="prediction"></div>
+			<div class="prediction" style="visibility: hidden">
+				<div class="response" id="prediction"></div>
+				<div id="answer">
+					<span>Correct?</span>
+					<button id="yes" onclick="send_score(event)" value="1">Yes</button>
+					<button id="no" onclick="send_score(event)" value="0">No</button>
+				</div>
+			</div>
 		</div>
 		</div>
 	</body>

@@ -12,5 +12,8 @@
 .prediction {
 	grid-column-start: 2;
 	grid-column-end: 3;
+}
+
+.response {
 	font-size: 50pt;
 }
