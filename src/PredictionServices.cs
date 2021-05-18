@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.ML;
+﻿using System.IO;
+using Microsoft.Extensions.ML;
 using Sentiment.Model;
 
 namespace Sentiment
@@ -22,6 +23,16 @@ namespace Sentiment
             var output = _predictionEnginePool.Predict(modelName: "SentimentAnalysisModel", example: input);
 
             return output.Prediction.Equals("1");
+        }
+
+        public void WriteTestData(string text, string score)
+        {
+            var path = "..\\data\\seed.txt";
+
+            using (var stream = File.AppendText(path))
+            {
+                stream.Write($"{text}\t{score}\n");
+            }
         }
     }
 }
