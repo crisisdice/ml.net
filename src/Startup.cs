@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.ML;
+using Microsoft.ML;
 using Sentiment.Logging;
 using Sentiment.Model;
 
@@ -33,18 +35,23 @@ namespace Sentiment
 
             services.AddLogging();
 
+            services.AddSingleton(x => new MLContext());
+
             services.AddScoped<IPredictionService, PredictionService>();
 
-            services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
-                .FromFile(modelName: "SentimentAnalysisModel", filePath:"..\\model\\MLModel.zip", watchForChanges: true);
+            foreach (var model in Enum.GetValues(typeof(TrainingModel)))
+            {
+                services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+                    .FromFile(model.ToString(),  $"..\\model\\ML{model}Model.zip", true);
+            }
 
-           // Use this code to poll for changes from an external uri
+            // Use this code to poll for changes from an external uri
 
-           // services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
-           //     .FromUri(
-           //         modelName: "SentimentAnalysisModel",
-           //         uri: "http://localhost:5000/MLModel.zip",
-           //         period: TimeSpan.FromHours(1));
+            // services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+            //     .FromUri(
+            //         modelName: "SentimentAnalysisModel",
+            //         uri: "http://localhost:5000/MLModel.zip",
+            //         period: TimeSpan.FromHours(1));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

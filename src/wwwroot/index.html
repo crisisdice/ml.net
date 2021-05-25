@@ -13,7 +13,12 @@
 			<div class="data">
   				<label for="data">Data:</label>
   				<input type="text" id="data" name="data"><br><br>
+  				<label for="model">Model: </label>
+				<select name="model" id="training-model">
+					<option value="Perceptron">Averaged Perceptron</option>
+				</select>
 				<button onclick="send()">Send</button>
+				<button onclick="train()">Train</button>
 			</div>
 			<div class="prediction" style="visibility: hidden">
 				<div class="response" id="prediction"></div>

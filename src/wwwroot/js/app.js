@@ -12,9 +12,6 @@ connection.on("ReceiveMessage", function (message) {
 
      log_entry.prepend(log_preface);
      document.getElementById("messagesList").appendChild(log_entry);
-
-     console.log(message);
-     console.log(log_entry);
  });
 
  connection.start().then(function () { console.log("started") }).catch(function (err) {
@@ -23,8 +20,14 @@ connection.on("ReceiveMessage", function (message) {
 
 function send() {
 	const rating = document.getElementById("data").value;
+	const model = document.getElementById("training-model").value;
+
+	if (rating == "")
+		return;
+
 	const url = new URL("/api", location.origin);
 	url.searchParams.append("data", rating);
+	url.searchParams.append("model", model);
 
 	fetch(url)
 		.then(response => response.text())
@@ -36,17 +39,30 @@ function send() {
 
 function send_score(event) {
 	const text = document.getElementById("data").value;
-	const score = event.target.value;
+	const correct = event.target.value == "1";
+	const emotion = document.getElementById("prediction").innerHTML == "😀" ? true : false;
+	const score = (correct ? emotion : !emotion) ? "1" : "0";
 
 	const request = {
 		text: text,
 		score: score
 	};
-	const url = new URL("/api", location.origin);
+	const url = new URL("/api/data", location.origin);
 
 	text.value = "";
 	document.getElementsByClassName("prediction")[0].style.visibility = "hidden";
 
-	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': 'application/json'}  })
+	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': 'application/json' } })
 }
 
+function train() {
+	const model = document.getElementById("training-model").value;
+
+	const request = {
+		model: model
+	};
+
+	const url = new URL("/api/training", location.origin);
+
+	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': 'application/json' } })
+}

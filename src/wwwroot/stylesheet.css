@@ -1,3 +1,7 @@
+body {
+	background: #e1f1dd;
+}
+
 .grid-container {
 	display: grid;
 	width: 90%;
@@ -9,6 +13,9 @@
 	grid-column-end: 2;
 	grid-row-start: 1;
 	grid-row-end: 1;
+
+	background: #cdc7be;
+	padding: 5px;
 }
 
 .prediction {
@@ -16,6 +23,10 @@
 	grid-column-end: 3;
 	grid-row-start: 1;
 	grid-row-end: 1;
+
+	background: #766161;
+	text-align: center;
+	padding: 5px;
 }
 
 .logging {
@@ -26,6 +37,8 @@
 
 	font-family: Menlo,Monaco,Consolas,monospace;
 	margin-top: 25px;
+	background: #87a7b3;
+	padding: 5px;
 }
 
 .response {

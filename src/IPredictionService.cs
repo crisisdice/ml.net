@@ -2,7 +2,8 @@
 {
     public interface IPredictionService
     {
-        bool Predict(string rating);
+        string Predict(string rating, TrainingModel model);
         void WriteTestData(string text, string score);
+        void Train(TrainingModel model);
     }
 }

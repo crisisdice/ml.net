@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using System.ComponentModel.DataAnnotations;
-
-using Sentiment.Logging;
 
 namespace Sentiment.Controllers
 {
@@ -22,32 +20,71 @@ namespace Sentiment.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(string data)
+        public IActionResult Get([Required] string data, [Required] string model)
         {
-            if (string.IsNullOrEmpty(data))
+            try
             {
-                _logger.LogError("No data provided");
-                return BadRequest("No data provided");
+                var trainingModel = GetModel(model);
+
+                var response = _service.Predict(data, trainingModel);
+
+                return Ok(response);
+            }
+            catch (ArgumentException)
+            {
+                _logger.LogError("Model {model} not found", model);
+
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error while predicting {e}", e);
+                return BadRequest();
             }
 
-            var response = _service.Predict(data) ? "😀" : "☹️";
-
-            _logger.LogInformation($"Predicted {data} as {response}");
-
-            return Ok(response);
         }
 
-        [HttpPost]
+        [HttpPost("data")]
         public IActionResult Post(DataRequest request)
         {
-            var text = request.Text;
-            var score = request.Score;
-            _logger.LogInformation($"Saving {text} as {score}");
+            try
+            {
+                _service.WriteTestData(request.Text, request.Score);
 
-            _service.WriteTestData(text, score);
-
-            return Ok();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error while saving data {e}", e);
+                return BadRequest();
+            }
         }
+
+        [HttpPost("training")]
+        public IActionResult Post(TrainingRequest request)
+        {
+            try
+            {
+                var model = GetModel(request.Model);
+
+                _service.Train(model);
+
+                return Ok();
+            }
+            catch (ArgumentException)
+            {
+                _logger.LogError("Model {model} not found", request.Model);
+
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error while training {e}", e);
+                return BadRequest();
+            }
+        }
+
+        public TrainingModel GetModel(string modelName) => (TrainingModel) Enum.Parse(typeof(TrainingModel), modelName);
     }
 
     public class DataRequest
@@ -56,5 +93,11 @@ namespace Sentiment.Controllers
         public string Text { get; set; }
         [Required]
         public string Score { get; set; }
+    }
+
+    public class TrainingRequest
+    {
+        [Required]
+        public string Model { get; set; }
     }
 }
