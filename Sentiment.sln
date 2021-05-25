@@ -5,10 +5,10 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{4C1F27C7-E538-4867-B7BA-A70D55396CFA}"
 	ProjectSection(SolutionItems) = preProject
-		data\yelp_labelled.txt = data\yelp_labelled.txt
+		data\seed.txt = data\seed.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4C1F27C7-E538-4867-B7BA-A70D55396CFA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{8486B14D-03F9-4205-B89D-9ACB94214713}"
 	ProjectSection(SolutionItems) = preProject
 		model\MLModel.zip = model\MLModel.zip
 	EndProjectSection

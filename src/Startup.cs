@@ -1,5 +1,3 @@
-using System;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.ML;
-
+using Sentiment.Logging;
 using Sentiment.Model;
 
 namespace Sentiment
@@ -31,13 +29,22 @@ namespace Sentiment
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sentiment", Version = "v1" });
             });
 
-            services.AddScoped<IPredictionServices, PredictionServices>();
+            services.AddSignalR();
+
+            services.AddLogging();
+
+            services.AddScoped<IPredictionService, PredictionService>();
 
             services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
-                .FromUri(
-                    modelName: "SentimentAnalysisModel",
-                    uri: "http://localhost:5000/MLModel.zip",
-                    period: TimeSpan.FromHours(1));
+                .FromFile(modelName: "SentimentAnalysisModel", filePath:"..\\model\\MLModel.zip", watchForChanges: true);
+
+           // Use this code to poll for changes from an external uri
+
+           // services.AddPredictionEnginePool<SentimentData, SentimentPrediction>()
+           //     .FromUri(
+           //         modelName: "SentimentAnalysisModel",
+           //         uri: "http://localhost:5000/MLModel.zip",
+           //         period: TimeSpan.FromHours(1));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +58,7 @@ namespace Sentiment
             }
 
             app.UseStaticFiles();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();
@@ -59,6 +66,7 @@ namespace Sentiment
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<LoggingHub>("/socket-logging");
             });
         }
     }

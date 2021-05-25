@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>ML</title>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" href="stylesheet.css">
-		<script src="app.js"></script>
-	</head>
+<head>
+	<title>ML</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="stylesheet.css">
+	<script src="js/libs.min.js"></script>
+	<script src="js/app.js"></script>
+</head>
 	<body>
 		<div>
 		<div class="grid-container">
@@ -21,6 +22,9 @@
 					<button id="yes" onclick="send_score(event)" value="1">Yes</button>
 					<button id="no" onclick="send_score(event)" value="0">No</button>
 				</div>
+			</div>
+			<div class="logging">
+				<div id="messagesList"></div>
 			</div>
 		</div>
 		</div>

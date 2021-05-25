@@ -1,19 +1,45 @@
 .grid-container {
 	display: grid;
-	width: 50%;
+	width: 90%;
 	margin: 0 auto;
 }
 
 .data {
 	grid-column-start: 1;
 	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 1;
 }
 
 .prediction {
 	grid-column-start: 2;
 	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 1;
+}
+
+.logging {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	grid-row-start: 2;
+	grid-row-end: 2;
+
+	font-family: Menlo,Monaco,Consolas,monospace;
+	margin-top: 25px;
 }
 
 .response {
 	font-size: 50pt;
+}
+
+.logging-information {
+	color: #437BD7;
+}
+
+.logging-warning {
+	color: #F38900;
+}
+
+.logging-error {
+	color: red;
 }

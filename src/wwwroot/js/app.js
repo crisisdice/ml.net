@@ -1,3 +1,26 @@
+var connection = new signalR.HubConnectionBuilder().withUrl("/socket-logging").build();
+
+connection.on("ReceiveMessage", function (message) {
+     var log_entry = document.createElement("div");
+     var log_preface = document.createElement("span");
+
+     log_preface.className = `logging-${message.level.toLowerCase()}`;
+     log_entry.className = "logentry";
+
+     log_preface.textContent = `${message.preface}`;
+     log_entry.textContent = `${message.entry}`;
+
+     log_entry.prepend(log_preface);
+     document.getElementById("messagesList").appendChild(log_entry);
+
+     console.log(message);
+     console.log(log_entry);
+ });
+
+ connection.start().then(function () { console.log("started") }).catch(function (err) {
+     return console.error(err.toString());
+});
+
 function send() {
 	const rating = document.getElementById("data").value;
 	const url = new URL("/api", location.origin);
@@ -26,4 +49,4 @@ function send_score(event) {
 
 	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': 'application/json'}  })
 }
-	
+
