@@ -11,6 +11,7 @@ using Microsoft.ML;
 
 using Sentiment.Logging;
 using Sentiment.Model;
+using Sentiment.Service;
 
 namespace Sentiment
 {

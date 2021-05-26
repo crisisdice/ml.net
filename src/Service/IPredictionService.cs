@@ -1,4 +1,4 @@
-﻿namespace Sentiment
+﻿namespace Sentiment.Service
 {
     public interface IPredictionService
     {

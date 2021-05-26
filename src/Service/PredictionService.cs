@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO;
-
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ML;
 using Microsoft.ML;
-
 using Sentiment.Model;
 
-namespace Sentiment
+namespace Sentiment.Service
 {
     public class PredictionService : IPredictionService
     {

@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 
 using System.ComponentModel.DataAnnotations;
 
+using Sentiment.Service;
+
 namespace Sentiment.Controllers
 {
     [ApiController]
