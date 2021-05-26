@@ -1,10 +1,13 @@
 using System;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+
 using Sentiment.Logging;
+
+using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
