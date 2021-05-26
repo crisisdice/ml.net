@@ -10,7 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{4C1F27C7-E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{8486B14D-03F9-4205-B89D-9ACB94214713}"
 	ProjectSection(SolutionItems) = preProject
-		model\MLModel.zip = model\MLModel.zip
+		model\MLPerceptronModel.zip = model\MLPerceptronModel.zip
+		model\MLRegressionModel.zip = model\MLRegressionModel.zip
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sentiment", "src\Sentiment.csproj", "{EE581BD1-A52C-4F56-9160-645D56D1D62C}"

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ML;
 using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Trainers;
+
 using Sentiment.Model;
 
 namespace Sentiment
@@ -79,7 +79,8 @@ namespace Sentiment
 
             var trainedModel = model switch
             {
-                TrainingModel.Perceptron => TrainPipeline(transformedData, model),
+                TrainingModel.Perceptron => TrainPerceptron(transformedData),
+                TrainingModel.Regression => TrainRegression(transformedData),
                 _ => throw new ArgumentOutOfRangeException(nameof(model), model, null)
             };
 
@@ -90,7 +91,7 @@ namespace Sentiment
             _mlContext.Model.Save(trainedModel, transformedData.Schema, stream.BaseStream);
         }
 
-        private TransformerChain<BinaryPredictionTransformer<LinearBinaryModelParameters>> TrainPipeline(IDataView data, TrainingModel model)
+        private ITransformer TrainPerceptron(IDataView data)
         {
             var processPipeline = _mlContext.Transforms.Text.FeaturizeText("Features", "Rating");
 
@@ -100,7 +101,20 @@ namespace Sentiment
 
             _logger.LogInformation("Training...");
 
-            return  trainingPipeline.Fit(data);
+            return trainingPipeline.Fit(data);
+        }
+
+        private ITransformer TrainRegression(IDataView data)
+        {
+            var processPipeline = _mlContext.Transforms.Text.FeaturizeText("Features", "Rating");
+
+            var trainer = _mlContext.BinaryClassification.Trainers.LbfgsLogisticRegression("BooleanScore");
+
+            var trainingPipeline = processPipeline.Append(trainer);
+
+            _logger.LogInformation("Training...");
+
+            return trainingPipeline.Fit(data);
         }
 
         private static string GetAbsolutePath(string relativePath)
@@ -116,6 +130,7 @@ namespace Sentiment
     }
     public enum TrainingModel
     {
-        Perceptron
+        Perceptron,
+        Regression
     }
 }
