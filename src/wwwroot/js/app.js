@@ -1,8 +1,8 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/socket-logging").build();
 
 connection.on("ReceiveMessage", function (message) {
-     var log_entry = document.createElement("div");
-     var log_preface = document.createElement("span");
+     const log_entry = document.createElement("div");
+     const log_preface = document.createElement("span");
 
      log_preface.className = `logging-${message.level.toLowerCase()}`;
      log_entry.className = "logentry";
@@ -18,11 +18,11 @@ connection.on("ReceiveMessage", function (message) {
      return console.error(err.toString());
 });
 
-function send() {
+function send_data() {
 	const rating = document.getElementById("data").value;
 	const model = document.getElementById("training-model").value;
 
-	if (rating == "")
+	if (rating === "")
 		return;
 
 	const url = new URL("/api", location.origin);
@@ -39,20 +39,20 @@ function send() {
 
 function send_score(event) {
 	const text = document.getElementById("data").value;
-	const correct = event.target.value == "1";
-	const emotion = document.getElementById("prediction").innerHTML == "😀" ? true : false;
-	const score = (correct ? emotion : !emotion) ? "1" : "0";
+	const correct = event.target.value === "1";
+	const emotion = document.getElementById("prediction").innerHTML === "😀" ? true : false;
 
 	const request = {
 		text: text,
-		score: score
+		score: (correct ? emotion : !emotion) ? "1" : "0"
 	};
+
 	const url = new URL("/api/data", location.origin);
 
 	text.value = "";
 	document.getElementsByClassName("prediction")[0].style.visibility = "hidden";
 
-	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': 'application/json' } })
+	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': "application/json" } });
 }
 
 function train() {
@@ -64,5 +64,5 @@ function train() {
 
 	const url = new URL("/api/training", location.origin);
 
-	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': 'application/json' } })
+	fetch(url, { method: "POST", body: JSON.stringify(request), headers: { 'Content-Type': "application/json" } });
 }
